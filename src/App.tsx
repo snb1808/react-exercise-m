@@ -1,5 +1,5 @@
 /*
-1. Using the mockApi below, fetch users when the component mounts and store this in component state
+1. Using the mockApi below, fetch users when the component mounts and store this in component state - done
 
 2. Using the data we just fetched, display the total balance of all accounts across all banks
 
@@ -10,14 +10,95 @@
 5. Create a button, when that button is clicked set the balance of all London Bank customers to 0
 */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserAccount } from './typings';
 
 export default function App(): React.ReactElement {
+  const [users, setUsers] = useState<UserAccount[]>([]);
+
+  useEffect(() => {
+    mockApi.fetchUsers().then((data) => setUsers(data));
+  }, []);
+
+  const getTotalBalance = () => {
+    let total = 0;
+
+    users.forEach(({ balance }) => total = total + balance);
+
+    return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const renderYorkshireCustomers = () => {
+    let yorkshireCustomers: Array<UserAccount> = [];
+
+    users.forEach(user =>
+        user.bank === 'Yorkshire Finance'
+        && !yorkshireCustomers.find(({ name }) => name === user.name)
+        && yorkshireCustomers.push(user)
+    );
+
+    return yorkshireCustomers.map((user, id) => <li key={id}>{user.name}</li>);
+  };
+
+  const renderTotals = () => {
+    let allUsers: Array<UserAccount> = [];
+
+    users.forEach(user => {
+      const userIndex = allUsers.findIndex(({ name }) => name === user.name);
+
+      let returnUser;
+
+      if (userIndex !== -1) {
+        returnUser = { ...allUsers[userIndex], balance: allUsers[userIndex].balance + user.balance }
+
+        allUsers.splice(userIndex, 1);
+      } else {
+        returnUser = user
+      }
+
+      allUsers.push(returnUser);
+    });
+
+    return allUsers.map(({ name, balance }, index) =>
+        <p key={index}>{name}: £{balance}</p>
+    );
+  };
+
+  const handleClick = () => {
+    const newUsers = users.map(user => {
+      if (user.bank === 'London Bank') {
+        user.balance = 0;
+      }
+
+      return user;
+    });
+
+    setUsers(newUsers);
+  };
+
   return (
-    <div className="App">
-      <h1>React Exercise</h1>
-    </div>
+      <div className='App'>
+        <h1>React Exercise</h1>
+        <div className='cards-container'>
+          <div className='card'>
+            <h3>Total balance:</h3>
+            <span>£{getTotalBalance()}</span>
+          </div>
+          <div className='card'>
+            <h3>Yorkshire Finance Customers:</h3>
+            <ul>
+              {renderYorkshireCustomers()}
+            </ul>
+          </div>
+          <div className='card'>
+            <h3>Individual Totals:</h3>
+            {renderTotals()}
+          </div>
+        </div>
+        <button onClick={handleClick}>
+          Crash London
+        </button>
+      </div>
   );
 }
 
