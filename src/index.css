@@ -11,3 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.cards-container {
+  display: flex;
+}
+
+.card {
+  width: fit-content;
+  height: fit-content;
+  background-color: aliceblue;
+  border-radius: 0.5rem;
+  border: 1px solid black;
+  padding: 0 1rem 1rem 1rem;
+  margin: 2rem;
+}
+
+button {
+  width: 10rem;
+  height: 10rem;
+  border-radius: 5rem;
+  background-color: red;
+  color: white;
+  font-size: large;
+  margin-left: 5rem;
+}
