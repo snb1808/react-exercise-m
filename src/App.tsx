@@ -23,7 +23,7 @@ export default function App(): React.ReactElement {
   const getTotalBalance = () => {
     let total = 0;
 
-    users.forEach(({ balance }) => total = total + balance);
+    users.map(({ balance }) => total = total + balance);
 
     return total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
@@ -31,7 +31,7 @@ export default function App(): React.ReactElement {
   const renderYorkshireCustomers = () => {
     let yorkshireCustomers: Array<UserAccount> = [];
 
-    users.forEach(user =>
+    users.map(user =>
         user.bank === 'Yorkshire Finance'
         && !yorkshireCustomers.find(({ name }) => name === user.name)
         && yorkshireCustomers.push(user)
@@ -43,7 +43,7 @@ export default function App(): React.ReactElement {
   const renderTotals = () => {
     let allUsers: Array<UserAccount> = [];
 
-    users.forEach(user => {
+    users.map(user => {
       const userIndex = allUsers.findIndex(({ name }) => name === user.name);
 
       let returnUser;
