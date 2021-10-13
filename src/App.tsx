@@ -60,7 +60,7 @@ export default function App(): React.ReactElement {
     });
 
     return allUsers.map(({ name, balance }, index) =>
-        <p key={index}>{name}: £{balance}</p>
+        <p key={index}>{name}: £{balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
     );
   };
 
